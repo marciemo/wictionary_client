@@ -3,7 +3,8 @@ require 'spec_helper'
 describe Contribution do 
   let (:entry) { 'potpie' }
   let (:definition) { 'pastry-covered meat and veggies cooked in a deep dish.' }
-  let (:params) { { :entry => entry, :definition => definition, :id => 1 } }
+  let (:id) { 1 }
+  let (:params) { { :entry => entry, :definition => definition, :id => id } }
   let (:valid_contribution) { Contribution.new(params) }
   
   context '#initialize' do
@@ -20,7 +21,7 @@ describe Contribution do
       valid_contribution.definition.should eq definition
     end
     it 'returns the id with #id' do
-      valid_contribution.id.should eq 1
+      valid_contribution.id.should eq id
     end
   end
 
@@ -33,29 +34,18 @@ describe Contribution do
     end
   end
 
-  context '#delete' do
+  context '.delete' do
     it 'DELETEs a contribution from the Wictionary' do
-      contribution = valid_contribution
-      stub = stub_request(:delete, "http://localhost:3000/")
-      Contribution.delete(entry)
+      stub = stub_request(:delete, "http://localhost:3000/words/1?id=1")
+      Contribution.delete(id)
       stub.should have_been_requested
     end
   end
 
-  context '#search' do
-    it 'GETs a requested contribution' do
-      contribution = valid_contribution
-      stub = stub_request(:get, "http://localhost:3000/")
-      Contribution.search(entry)
-      stub.should have_been_requested
-    end
-  end
-
-  context '#update' do
+  context '.update' do
     it 'POSTs a contribution to the Wictionary' do
-      contribution = valid_contribution
-      stub = stub_request(:put, HOSTNAME)
-      contribution.update
+      stub = stub_request(:put, "http://localhost:3000/words/1")
+      Contribution.update(params)
       stub.should have_been_requested
     end
   end

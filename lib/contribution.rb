@@ -16,14 +16,8 @@ class Contribution
     conn.delete("#{HOSTNAME}/words/#{id}",:id => id)
   end
 
-  def self.search(entry)
-    #params  = {:entry => word}
-    conn.get(HOSTNAME, @params)
-  end
-
-  def update
-    #params = {:entry => @entry, :definition => @definition}
-    conn.put(HOSTNAME, @params)
+  def self.update(params)
+    conn.put("#{HOSTNAME}/words/#{params[:id]}",{:word => params})
   end
 
   def self.list
